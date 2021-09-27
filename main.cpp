@@ -22,7 +22,7 @@ void motion_eq(const state_type &x, state_type &dxdt, const double t ){
 	dxdt[5] = F(x, t)[2];																			// v_z
 }
 
-void obs(const state_type &x, const double t){
+void obs_cout(const state_type &x, const double t){
 	cout << t << '\t' << x[0] << ' ' << x[1] << ' ' << x[2] << ' ' << x[3] << ' ' << x[4] << ' ' << x[5] << '\n';
 }
 
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 
 	state_type x = {1, 0, 0, 0, 0, 0};
 
-	integrate(motion_eq, x, 0.0, 10.0, 0.01, obs);
+	integrate(motion_eq, x, 0.0, 10.0, 0.01, obs_cout);
 
 	return 0;
 }
