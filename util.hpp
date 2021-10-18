@@ -27,12 +27,13 @@ class MotionEquation{
 public:
 	MotionEquation(force_type _F, double _m = 1): F(_F), m(_m) {}
 	void operator()(const state_type &x, state_type &dxdt, const double t ){
-		dxdt[0] = x[3];																						// d(rho)/dt = v_rho
-		dxdt[1] = x[4];																						// d(theta)/dt = v_theta
-		dxdt[2] = x[5];																						// dz/dt = v_z
-		dxdt[3] = F(x, t)[1] / m + x[0] * x[4] * x[4];						// v_rho
-		dxdt[3] = (- F(x, t)[2] / m +  2 * x[3] * x[4]) / x[0];		// v_theta
-		dxdt[5] = F(x, t)[2];																			// v_z
+		vector_type f = F(x, t);
+		dxdt[0] = x[3];															// d(rho)/dt = v_rho
+		dxdt[1] = x[4] / x[0];											// d(theta)/dt = v_theta / rho
+		dxdt[2] = x[5];															// dz/dt = v_z
+		dxdt[3] = f[0] / m + x[4] * x[4] / x[0];		// v_rho
+		dxdt[3] = f[1] / m - x[3] * x[4] / x[0];		// v_theta
+		dxdt[5] = f[2] / m;													// v_z
 	}
 };
 
