@@ -11,9 +11,20 @@
 using namespace std;
 using namespace boost::numeric::odeint;
 
+// types
 typedef boost::array<double, 6> state_type;			// state given by {rho, theta, z, v_rho, v_theta, v_z}
 typedef boost::array<double, 3> vector_type;		// a 3 coordinates vector
 typedef function<vector_type(const state_type&, const double)> force_type; // F({x, v}, t)
+typedef function<vector_type(const vector_type&, const double)> vector_field_type; // B(x, t)
+
+// Null
+const vector_type null_vector = {0, 0, 0};
+const state_type null_state = {0, 0, 0, 0, 0, 0};
+const force_type null_force = [] (const state_type&, const double) { return null_vector;};
+const vector_field_type null_vector_field = [] (const vector_type&, const double) { return null_vector;};
+
+
+// Operations over types
 
 ostream& operator<<(ostream& out, const state_type& state){
 	for(auto x: state)
@@ -21,25 +32,45 @@ ostream& operator<<(ostream& out, const state_type& state){
 	return out; 
 }
 
+vector_type get_position(const state_type& state){
+	vector_type x;
+	for(int i=0; i<3; i++)
+		x[i] = state[i];
+	return x;
+}
+
+vector_type get_velocity(const state_type& state){
+	vector_type v;
+	for(int i=3; i<6; i++)
+		v[i] = state[i];
+	return v;
+}
+
 class MotionEquation{
-	force_type F;
-	double m;
+	const double gam;			// adimensional factor
+	vector_field_type B;	// magnetic induction field
+	vector_field_type E;	// electric field
+	force_type F;					// other forces
 public:
-	MotionEquation(force_type _F, double _m = 1): F(_F), m(_m) {}
+	MotionEquation(const double _gam, vector_field_type _B = null_vector_field, vector_field_type _E = null_vector_field, force_type _F = null_force): gam(_gam), B(_B), E(_E), F(_F) {}
 	void operator()(const state_type &x, state_type &dxdt, const double t ){
-		vector_type f = F(x, t);
-		dxdt[0] = x[3];															// d(rho)/dt = v_rho
-		dxdt[1] = x[4] / x[0];											// d(theta)/dt = v_theta / rho
-		dxdt[2] = x[5];															// dz/dt = v_z
-		dxdt[3] = f[0] / m + x[4] * x[4] / x[0];		// v_rho
-		dxdt[3] = f[1] / m - x[3] * x[4] / x[0];		// v_theta
-		dxdt[5] = f[2] / m;													// v_z
+
+		vector_type r = get_position(x);
+		vector_type b = B(r, t);
+		vector_type e = E(r, t);
+		vector_type f = F(x, t);	// dispersion term
+
+		dxdt[0] = gam * x[3];															// d(rho)/dt = v_rho
+		dxdt[1] = gam * x[4] / x[0];											// d(theta)/dt = v_theta / rho
+		dxdt[2] = gam * x[5];															// dz/dt = v_z
+		dxdt[3] = f[0] + x[4] * b[2] - x[5] * b[1] + e[0] + gam * x[4] * x[4] / x[0];		// v_rho
+		dxdt[3] = f[1] + x[5] * b[0] - x[3] * b[2] + e[1] - gam * x[3] * x[4] / x[0] ;	// v_theta
+		dxdt[5] = f[2] + x[3] * b[1] - x[4] * b[0] + e[2];															// v_z
 	}
 };
 
-
-//////////////////////////////////////////////////
-//////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 state_type load_initial_state(string filename){
 	state_type initial_state;
@@ -100,7 +131,6 @@ vector_type B_Asdex(double rp,double zp) {
 	double F0_a= 30.4;
 	double Psi= cc1 + cc2*r*r+ r*jb1p*(cc3+cc3*z) + cc5*csp + cc6*snp + r*r*(cc7*csp + cc8*snp) +cc9*cos(p_a*rho) + cc10*sin(p_a*rho) + r*jb1nu*(cc11*csq +cc12*snq) + r*jb1q*(cc13*csnu +cc14*snnu) + r*yb1nu*(cc15*csq + cc16*snq) + r*yb1q*(cc17*csnu+cc18*snnu);
 	Bt= ((sqrt(T_a*Psi*Psi+2.0*u_a*Psi+ F0_a*F0_a ))/r)/(BT0) ;
-
 
 	vector_type B;
   B[0]=Br;
