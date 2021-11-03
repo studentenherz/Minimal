@@ -31,6 +31,12 @@ ostream& operator<<(ostream& out, const state_type& state){
 	return out; 
 }
 
+ostream& operator<<(ostream& out, const vector_type& vec){
+	for(auto x: vec)
+		out << x << ' ';
+	return out; 
+}
+
 vector_type get_position(const state_type& state){
 	vector_type x;
 	for(int i=0; i<3; i++)
@@ -63,18 +69,20 @@ public:
 		dxdt[1] = gam * x[4] / x[0];											// d(theta)/dt = v_theta / rho
 		dxdt[2] = gam * x[5];															// dz/dt = v_z
 		dxdt[3] = f[0] + x[4] * b[2] - x[5] * b[1] + e[0] + gam * x[4] * x[4] / x[0];		// v_rho
-		dxdt[3] = f[1] + x[5] * b[0] - x[3] * b[2] + e[1] - gam * x[3] * x[4] / x[0] ;	// v_theta
+		dxdt[4] = f[1] + x[5] * b[0] - x[3] * b[2] + e[1] - gam * x[3] * x[4] / x[0] ;	// v_theta
 		dxdt[5] = f[2] + x[3] * b[1] - x[4] * b[0] + e[2];															// v_z
 	}
 };
 
-template <typename eq_type>
-int integrate(eq_type f, state_type &x, double ti, double tf, double dt /*, void f(const state_type&, const double) */){
+
+// Integrator RK4_NL
+template <typename eq_type, typename obs_type>
+int integrate(eq_type f, state_type &x, double ti, double tf, double dt , obs_type obs){
 	double t = ti;
 	int steps = 0;
 	while(t < tf){
 		steps++;
-		// obs(x, t);
+		obs(x, t);
 
 		double a[6], b[6], c[6];
 		// Valores de las constantes del método integrador
@@ -105,6 +113,17 @@ int integrate(eq_type f, state_type &x, double ti, double tf, double dt /*, void
 		t += dt;
 	}
 	return steps;
+}
+
+// NULL Observer
+void null_observer(const state_type &x, const double t){
+	return;
+}
+
+// Overloading for NULL Observer
+template <typename eq_type>
+int integrate(eq_type f, state_type &x, double ti, double tf, double dt){
+	return integrate(f, x, ti, tf, dt, null_observer);
 }
 
 //////////////////////////////////////////////////////////////

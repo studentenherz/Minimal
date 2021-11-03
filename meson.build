@@ -5,3 +5,4 @@ project('com.github.studentenherz.minimal', 'cpp', default_options: ['cpp_std=c+
 # endif
 
 executable('main', 'main.cpp')
+executable('test.exe', 'test.cpp')
