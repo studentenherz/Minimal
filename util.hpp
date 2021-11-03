@@ -1,19 +1,18 @@
 #if !defined(UTIL)
 #define UTIL
 
-#include <boost/numeric/odeint.hpp>
 #include <functional>
 #include <string>
 #include <fstream>
 #include <cmath>
+#include <array>
 #include <stdlib.h>
 
 using namespace std;
-using namespace boost::numeric::odeint;
 
 // types
-typedef boost::array<double, 6> state_type;			// state given by {rho, theta, z, v_rho, v_theta, v_z}
-typedef boost::array<double, 3> vector_type;		// a 3 coordinates vector
+typedef array<double, 6> state_type;		// state given by {rho, theta, z, v_rho, v_theta, v_z}
+typedef array<double, 3> vector_type;		// a 3 coordinates vector
 typedef function<vector_type(const state_type&, const double)> force_type; // F({x, v}, t)
 typedef function<vector_type(const vector_type&, const double)> vector_field_type; // B(x, t)
 
@@ -68,6 +67,45 @@ public:
 		dxdt[5] = f[2] + x[3] * b[1] - x[4] * b[0] + e[2];															// v_z
 	}
 };
+
+template <typename eq_type>
+int integrate(eq_type f, state_type &x, double ti, double tf, double dt /*, void f(const state_type&, const double) */){
+	double t = ti;
+	int steps = 0;
+	while(t < tf){
+		steps++;
+		// obs(x, t);
+
+		double a[6], b[6], c[6];
+		// Valores de las constantes del método integrador
+		a[0]=0.0;					      b[0]=0.032918605146;	c[0]=0.0;
+		a[1]=-0.737101392796;		b[1]=0.823256998200;	c[1]=0.032918605146;
+		a[2]=-1.634740794341;		b[2]=0.381530948900;	c[2]=0.249351723343;
+		a[3]=-0.744739003780;		b[3]=0.200092213184;	c[3]=0.466911705055;
+		a[4]=-1.469897351522;		b[4]=1.718581042715;	c[4]=0.582030414044;
+		a[5]=-2.813971388035;		b[5]=0.27;				    c[5]=0.847252983783;
+
+		state_type dxdt;
+		state_type xx; // intermediate states
+
+		dxdt = xx = null_state;
+
+		for(int i=0; i<6; i++){
+			double tt = t + c[i] * dt;
+
+			// dxdt = f(x, t)
+			f(x, dxdt, tt);
+
+			for(int j=0; j<6; j++){
+				xx[j] = a[i] * xx[j] + dt * dxdt[j];
+				x[j] = x[j] + b[i] * xx[j];
+			}
+		}
+
+		t += dt;
+	}
+	return steps;
+}
 
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
