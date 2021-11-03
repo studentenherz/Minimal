@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
+
 #include "util.hpp"
+#include "odeint.hpp"
 
 using namespace std;
 
@@ -17,7 +19,7 @@ int main(int argc, char* argv[]){
 	}
 
 	char* ifname = argv[1];
-	char* ofname = "out";
+	char const *ofname = "out";
 	if(argc >= 3) ofname = argv[2];
 
 	ifstream fi(ifname);

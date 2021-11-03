@@ -1,8 +1,9 @@
 project('com.github.studentenherz.minimal', 'cpp', default_options: ['cpp_std=c++11'])
 
-# if get_option('buildtype').startswith('debug')
-# 	add_project_arguments('-DEBUG', language: 'cpp')
-# endif
 
-executable('main', 'main.cpp')
-executable('test.exe', 'test.cpp')
+inc_dir = include_directories('includes')
+
+subdir('includes')
+
+executable('main', 'main.cpp', dependencies: lib_dep)
+executable('test.exe', 'test.cpp', dependencies: lib_dep)
