@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <array>
+#include <cmath>
 
 using namespace std;
 
@@ -47,5 +48,78 @@ vector_type get_velocity(const state_type& state){
 	return v;
 }
 
+// Vector operations
+
+double dot(const vector_type& a, const vector_type& b){
+	double s = 0;
+	for (int i=0; i<(int)a.size(); ++i)
+		s += a[i] * b[i];
+	return s;
+}
+
+vector_type cross(const vector_type& a, const vector_type& b){
+	vector_type c;
+	c[0] = a[1] * b[2] - a[2] * b[1];
+	c[1] = a[2] * b[0] - a[0] * b[2];
+	c[2] = a[0] * b[1] - a[1] * b[0];
+	return c;
+}
+
+vector_type operator*(const vector_type& a, double t){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = a[i] * t;
+	return c;
+}
+
+vector_type operator*(double t, const vector_type& a){
+	return a * t;
+}
+
+vector_type operator*(const vector_type& a, const vector_type& b){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = a[i] * b[i];
+	return c;
+}
+
+vector_type operator/(const vector_type& a, double t){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = a[i] / t;
+	return c;
+}
+
+vector_type operator/(double t, const vector_type& a){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = t / a[i];
+	return c;
+}
+
+vector_type operator/(const vector_type& a, const vector_type& b){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = a[i] / b[i];
+	return c;
+}
+
+vector_type operator+(const vector_type& a, const vector_type& b){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = a[i] + b[i];
+	return c;
+}
+
+vector_type operator-(const vector_type& a, const vector_type& b){
+	vector_type c;
+	for (int i=0; i<(int)a.size(); ++i)
+		c[i] = a[i] - b[i];
+	return c;
+}
+
+double mod(const vector_type& v){
+	return sqrt(dot(v, v));
+}
 
 #endif // TYPES

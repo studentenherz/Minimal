@@ -26,7 +26,7 @@ public:
 		dxdt[1] = gam * x[4] / x[0];											// d(theta)/dt = v_theta / rho
 		dxdt[2] = gam * x[5];															// dz/dt = v_z
 		dxdt[3] = f[0] + x[4] * b[2] - x[5] * b[1] + e[0] + gam * x[4] * x[4] / x[0];		// v_rho
-	dxdt[4] = f[1] + x[5] * b[0] - x[3] * b[2] + e[1] - gam * x[3] * x[4] / x[0] ;	// v_theta
+		dxdt[4] = f[1] + x[5] * b[0] - x[3] * b[2] + e[1] - gam * x[3] * x[4] / x[0] ;	// v_theta
 		dxdt[5] = f[2] + x[3] * b[1] - x[4] * b[0] + e[2];															// v_z
 	}
 };
