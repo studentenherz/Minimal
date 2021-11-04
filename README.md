@@ -12,11 +12,11 @@ ninja
 
 Contains and implements types used to store vectors and states (position, velocity) and defines the operations with them
 
-##### `odeint.hpp`
+#### `odeint.hpp`
 
 Defines (and implements) the motion equation for the particles and the methods for integrating them.
 
-##### `util.hpp`
+#### `util.hpp`
 
 Defines (and implements) methods that are mos specific (like, for instance, the ASDEX magnetic field fucntion `B_ASDEX`)
 
