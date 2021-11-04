@@ -85,10 +85,8 @@ vector_type B_Asdex(double rp,double zp) {
 }
 
 vector_type g_center(const vector_type& r, const vector_type& v,const vector_type& B, double gam){
-	vector_type vxB = cross(v, B);
-	double vB = mod(vxB);
-	double vmod = mod(v);
-	vector_type dr = gam * vxB * vmod * vmod / (vB * vB);
+	double modB = mod(B);
+	vector_type dr = gam * cross(v, B) / (modB * modB);
 	return r + dr;
 }
 
