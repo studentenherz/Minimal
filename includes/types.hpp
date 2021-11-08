@@ -12,6 +12,10 @@ typedef array<double, 6> state_type;		// state given by {rho, theta, z, v_rho, v
 typedef array<double, 3> vector_type;		// a 3 coordinates vector
 typedef function<vector_type(const state_type&, const double)> force_type; // F({x, v}, t)
 typedef function<vector_type(const vector_type&, const double)> vector_field_type; // B(x, t)
+typedef struct {
+	int Z; // charge number
+	double m; // mass
+} species_type;
 
 // Null
 const vector_type null_vector = {0, 0, 0};
