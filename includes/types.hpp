@@ -48,8 +48,8 @@ vector_type get_position(const state_type& state){
 
 vector_type get_velocity(const state_type& state){
 	vector_type v;
-	for(int i=3; i<6; i++)
-		v[i] = state[i];
+	for(int i=0; i<3; i++)
+		v[i] = state[i+3];
 	return v;
 }
 
