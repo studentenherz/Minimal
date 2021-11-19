@@ -6,15 +6,16 @@
 
 using namespace std;
 
-const double v0 = 1.84142e7; // m/s
+const double v0 = 1.84142e7; // m/s  (3.54 MeV of a proton)
 const double pre_eta = 805684; // m^6 s^-4
 const double n0 = 1e20; // m
 const double Omega = 0.00085; // s^-1
+const double tau = 93e-6; // s
 const double a = 0.5; // m
 
 // adimensional constants 
-const double gam = v0 / (Omega * a);
-const double eta = pre_eta * n0 / (Omega * pow(v0, 3));
+const double gam = v0 * tau / a;
+const double eta = pre_eta * n0 * tau / pow(v0, 3);
 
 // campo de temperatura (en realidad da la velocidad media en relación a v0)
 double Tf(const vector_type& v, double t){
@@ -50,14 +51,14 @@ int main(int argc, char* argv[]){
 
 	MotionEquation eq(gam, null_vector_field, null_vector_field, f);
 
-	state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0};
+	state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.15};
 
 	cout << f(x, 0);
 
 	ofstream fo("sldwn.dat");
 	Observer obs(fo);
 
-	integrate(eq, x, 0, 1.0, 0.001, obs, 10);
+	integrate(eq, x, 0, 0.2, 0.001, obs);
 
 	cout << "Finished :)\n";
 

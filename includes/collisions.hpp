@@ -36,8 +36,12 @@ public:
 		double nu = 0;
 		for(int i=0; i<(int)q.size(); ++i){
 			double xb = v_mod / T[i](r, t);
-			nu += eta * sqr(q[i]) * sqr(q_a) * n[i](r, t) *(1 + m_a/m[i]) * logl[i] * erf_minus_d_erf(xb) / (pow(v_mod, 3) * sqr(m_a));
+			// terms that depend on plasma species
+			nu +=  sqr(q[i]) *  n[i](r, t) * (1 + m_a/m[i]) * logl[i] * erf_minus_d_erf(xb) ;
 		}
+
+		// other terms
+		nu *= eta * sqr(q_a) / (pow(v_mod, 3) * sqr(m_a));
 
 		vector_type sd = - nu * v;
 		return sd;
