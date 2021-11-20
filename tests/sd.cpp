@@ -7,15 +7,15 @@
 using namespace std;
 
 const double v0 = 1.84142e7; // m/s  (3.54 MeV of a proton)
-const double pre_eta = 805684; // m^6 s^-4
+// const double pre_eta = 806039; // m^6 s^-4
 const double n0 = 1e20; // m
 const double Omega = 0.00085; // s^-1
 const double tau = 93e-6; // s
 const double a = 0.5; // m
 
 // adimensional constants 
-const double gam = v0 * tau / a;
-const double eta = pre_eta * n0 * tau / pow(v0, 3);
+const double gam = 3.42504e3;
+const double eta = 1.20055;
 
 // campo de temperatura (en realidad da la velocidad media en relación a v0)
 double Tf(const vector_type& v, double t){
@@ -47,6 +47,22 @@ vector_type f(const state_type& x, double t){
 	return col.slow_down(x, 0);
 }
 
+// Observer Example
+class ObserverVelocity{
+	ostream &os;
+	double thr_v;
+	bool check = true;
+public:
+	ObserverVelocity (ostream &_os, double threshold_v): os(_os), thr_v(threshold_v) {}
+	void operator()(const state_type &x, const double t) {
+			os << t << '\t' << x[0] << ' ' << x[1] << ' ' << x[2] << ' ' << x[3] << ' ' << x[4] << ' ' << x[5] << '\n';
+			if (check && mod(get_velocity(x)) < thr_v){
+				cout << "Got under v = " << thr_v << " at time t = " << t << '\n';\
+				check = false;
+			}
+	}
+};
+
 int main(int argc, char* argv[]){
 
 	MotionEquation eq(gam, null_vector_field, null_vector_field, f);
@@ -56,9 +72,11 @@ int main(int argc, char* argv[]){
 	cout << f(x, 0);
 
 	ofstream fo("sldwn.dat");
-	Observer obs(fo);
+	ObserverVelocity obs(fo, 0.053);
 
-	integrate(eq, x, 0, 0.2, 0.001, obs);
+	integrate(eq, x, 0, 0.2, 0.000001, obs);
+	// Should give 9.59919*10^-6, works better for smaller dt,
+	// maybe an adaptative dt will help
 
 	cout << "Finished :)\n";
 
