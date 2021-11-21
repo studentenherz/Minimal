@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 
 	ofstream fo("out.dat");
 	Observer obs(fo);
-	int steps_rk4nl = integrate(motion_eq, x, 0.0, 1600000, 0.2, obs, 50);
+	int steps_rk4nl = integrate(motion_eq, x, 0.0, 2570.0, 0.2, obs);
 
 	cout << x << '\n';
 	cout << "Integrator rk4nl took " << steps_rk4nl << " steps\n";
