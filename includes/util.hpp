@@ -1,6 +1,9 @@
 #if !defined(UTIL)
 #define UTIL
 
+#define sqr(a) a * a
+#define two_pi 6.283185307179586477
+
 #include <string>
 #include <fstream>
 #include <cmath>
@@ -119,6 +122,26 @@ public:
 	}
 	inline unsigned int int32() { return (unsigned int)int64(); }
 	inline double doub() { return 5.42101086242752217E-20 * int64(); }
+	double random(double xmin, double xmax){
+		return xmin + doub() * (xmax - xmin);
+	}
+};
+
+class NormalRand{
+	double sigma;	// std deviation
+	double mu;		// mean
+	unsigned long long seed;
+	Ran2 ran;			// uniform random generator
+public:
+	NormalRand(unsigned long long seed_, double sigma_ = 1.0, double mu_ = 0): sigma(sigma_), mu(mu_), seed(seed_), ran(seed) {};
+	
+	double operator()(){
+		// This uses Box-Muller algorithm
+		double x1, x2;
+		x1 = ran.doub(); // 0 to 1
+		x2 = ran.doub(); // 0 to 1
+		return sigma * sqrt(-2.0 * log(x1)) * cos(two_pi * x2) + mu;
+	}
 };
 
 #endif // UTIL
