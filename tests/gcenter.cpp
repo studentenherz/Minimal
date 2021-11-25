@@ -6,9 +6,12 @@
 using namespace std;
 
 const double gam = 0.06234974;
+const double BT0 = 17.815757116271065; // in Gauss
+const double a = 0.5; // in m
+
 
 vector_type B(const vector_type&x, const double t){
-	return B_Asdex(x[0], x[2]);
+	return B_Asdex(x[0] * a, x[2] * a)/BT0;
 }
 
 int main(int argc, char* argv[]){
