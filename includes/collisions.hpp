@@ -120,6 +120,14 @@ public:
 		return dvdt;
 	}
 
+	// Overall efect of collisions
+	void operator()(const state_type &x, state_type &dxdt, const double t ){
+		vector_type dxdt_col = slow_down(x, t) + dispersion(x, t);
+		dxdt[3] += dxdt_col[0];
+		dxdt[4] += dxdt_col[1];
+		dxdt[5] += dxdt_col[2];
+	}
+
 };
   
 #endif // COLLISIONS_HPP

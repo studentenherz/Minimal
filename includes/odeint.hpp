@@ -31,6 +31,17 @@ public:
 	}
 };
 
+template<typename motion_eq_type, typename collision_op_type>
+class Evolution{
+	motion_eq_type eq;
+	collision_op_type col;
+public:
+	Evolution(motion_eq_type motion_eq, collision_op_type collision_operator): eq(motion_eq), col(collision_operator) {}
+	void operator()(const state_type &x, state_type &dxdt, const double t ){
+		eq(x, dxdt, t);
+		col(x, dxdt, t);
+	}
+};
 
 // Integrator RK4_NL
 template <typename eq_type, typename obs_type>

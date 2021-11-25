@@ -27,28 +27,6 @@ double nf(const vector_type& v, double t){
 	return 1;
 }
 
-	/* Probando el frenamiento de un ion (un protón) por electrones en un plasma
-	** con densidad 10^20 1/m³ y temperatura 2.5 keV	
-	** que es igual a una velocidad 978702 m/s = 0.053 v0
-	*/
-
-vector<int> q = {1};
-vector<double> m = {1};
-vector<double> loglambda = {17.5};
-vector<scalar_field_type> T = {Tf};
-vector<scalar_field_type> n = {nf};
-
-int q_a = 1;
-double m_a = 1836;
-
-NormalRand ran(2LL);
-
-Collisions col(q, m, loglambda, T, n, eta, m_a, q_a, ran);
-
-vector_type f(const state_type& x, double t){
-	return col.slow_down(x, 0) + col.dispersion(x, 0);
-}
-
 // Observer Example
 class ObserverVelocity{
 	ostream &os;
@@ -67,16 +45,36 @@ public:
 
 int main(int argc, char* argv[]){
 
-	MotionEquation eq(gam, null_vector_field, null_vector_field, f);
+		/* Probando el frenamiento de un ion (un protón) por electrones en un plasma
+	** con densidad 10^20 1/m³ y temperatura 2.5 keV	
+	** que es igual a una velocidad 978702 m/s = 0.053 v0
+	*/
 
+	vector<int> q = {1};
+	vector<double> m = {1};
+	vector<double> loglambda = {17.5};
+	vector<scalar_field_type> T = {Tf};
+	vector<scalar_field_type> n = {nf};
+
+	int q_a = 1;
+	double m_a = 1836;
+
+	// Collisions operator
+	NormalRand ran(2LL);
+	Collisions col(q, m, loglambda, T, n, eta, m_a, q_a, ran);
+	// Motion equation (no fields)
+	MotionEquation eq(gam, null_vector_field, null_vector_field);
+
+	// evolution operator
+	Evolution<MotionEquation, Collisions> evol(eq, col);
+
+	// initial state
 	state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.15};
-
-	cout << f(x, 0);
 
 	ofstream fo("sldwn.dat");
 	ObserverVelocity obs(fo, 0.037581);
 
-	integrate(eq, x, 0, 1.2, 0.000001, obs);
+	integrate(evol, x, 0, 1.2, 0.000001, obs);
 	// gives nice result for slowing down
 
 	cout << "Finished :)\n";
