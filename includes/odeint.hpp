@@ -20,7 +20,7 @@ public:
 		vector_type r = get_position(x);
 		vector_type b = B(r, t);
 		vector_type e = E(r, t);
-		vector_type f = F(x, t);	// dispersion term
+		vector_type f = F(x, t);	// other forces
 
 		dxdt[0] = gam * x[3];															// d(rho)/dt = v_rho
 		dxdt[1] = gam * x[4] / x[0];											// d(theta)/dt = v_theta / rho
