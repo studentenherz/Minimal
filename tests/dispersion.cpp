@@ -67,7 +67,7 @@ int main(int argc, char* argv[]){
 
 		cout << "Calculating collisions with seed " << seed << '\n';
 
-		integrate(evol, x, 0, 1200, 0.00001, obs, 50);
+		integrate(evol, x, 0, 1200.0, 0.00001, obs, 50);
 	}
 
 	cout << "Finished :)\n";

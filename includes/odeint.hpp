@@ -86,18 +86,6 @@ int integrate(eq_type f, state_type &x, double ti, double tf, double dt , obs_ty
 	return steps;
 }
 
-template <typename eq_type, typename obs_type>
-int integrate(eq_type f, state_type &x, double ti, double tf, int N_steps , obs_type obs, int obs_interval = 1){
-	double dt = (tf - ti) / N_steps;
-	return integrate(f, x, ti, tf, dt, obs, obs_interval);
-}
-
-template <typename eq_type, typename obs_type>
-int integrate(eq_type f, state_type &x, double ti, int N_steps, double dt , obs_type obs, int obs_interval = 1){
-	double tf = ti + dt * N_steps;
-	return integrate(f, x, ti, tf, dt, obs, obs_interval);
-}
-
 // NULL Observer
 void null_observer(const state_type &x, const double t){
 	return;
