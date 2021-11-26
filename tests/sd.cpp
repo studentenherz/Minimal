@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include "collisions.hpp"
 #include "odeint.hpp"
@@ -27,27 +28,11 @@ double nf(const vector_type& v, double t){
 	return 1;
 }
 
-// Observer Example
-class ObserverVelocity{
-	ostream &os;
-	double thr_v;
-	bool check = true;
-public:
-	ObserverVelocity (ostream &_os, double threshold_v): os(_os), thr_v(threshold_v) {}
-	void operator()(const state_type &x, const double t) {
-			os << t << '\t' << x[0] << ' ' << x[1] << ' ' << x[2] << ' ' << x[3] << ' ' << x[4] << ' ' << x[5] << '\n';
-			if (check && mod(get_velocity(x)) < thr_v){
-				cout << "Got under v = " << thr_v << " at time t = " << t << '\n';\
-				check = false;
-			}
-	}
-};
-
 int main(int argc, char* argv[]){
 
-		/* Probando el frenamiento de un ion (un protón) por electrones en un plasma
-	** con densidad 10^20 1/m³ y temperatura 2.5 keV	
-	** que es igual a una velocidad 978702 m/s = 0.053 v0
+	/*
+		Slowing down and dispersion of an Hydrogen ion in an homogeneus plasma by the effect of the electrons
+		n = 10^{20} m^{-3}, T = 2.5 keV
 	*/
 
 	vector<int> q = {1};
@@ -59,23 +44,30 @@ int main(int argc, char* argv[]){
 	int q_a = 1;
 	double m_a = 1836;
 
-	// Collisions operator
-	NormalRand ran(2LL);
-	Collisions col(q, m, loglambda, T, n, eta, m_a, q_a, ran);
 	// Motion equation (no fields)
 	MotionEquation eq(gam, null_vector_field, null_vector_field);
 
-	// evolution operator
-	Evolution<MotionEquation, Collisions> evol(eq, col);
+	for(unsigned long long seed=1; seed<1000; seed++){
 
-	// initial state
-	state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.15};
+		// Collisions operator
+		NormalRand ran(seed); // seed
+		Collisions col(q, m, loglambda, T, n, eta, m_a, q_a, ran);
 
-	ofstream fo("sldwn.dat");
-	ObserverVelocity obs(fo, 0.037581);
+		// Evolution operator
+		Evolution<MotionEquation, Collisions> evol(eq, col);
 
-	integrate(evol, x, 0, 1.2, 0.000001, obs);
-	// gives nice result for slowing down
+		// initial state
+		state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.15};
+
+		string fname = "collisions/" + to_string(seed) + ".dat";
+
+		ofstream fo(fname);
+		Observer obs(fo);
+
+		cout << "Calculating collisions with seed " << seed << '\n';
+
+		integrate(evol, x, 0, 1.2, 0.00001, obs, 50);
+	}
 
 	cout << "Finished :)\n";
 
