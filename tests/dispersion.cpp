@@ -63,7 +63,7 @@ int main(int argc, char* argv[]){
 
 		cout << "Calculating collisions with seed " << seed << '\n';
 
-		full_integrate(eq, col, 200, x, 0, 1200, 0.00001, obs, 1);
+		full_integrate(eq, col, 200, x, 0, 1200, 0.00001, obs, 20000);
 	}
 
 	cout << "Finished :)\n";
