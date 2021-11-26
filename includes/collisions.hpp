@@ -30,7 +30,12 @@ class Collisions{
 	double q_a; // charge of test particle
 
 	NormalRand ran; // random generator
+
 public:
+	// Use or not dispersion and slowing_down terms
+	bool dispQ = true;
+	bool sdQ = true;
+
 	Collisions (vector<int> q_, vector<double> m_, vector<double> logl_, vector<scalar_field_type> T_, vector<scalar_field_type> n_, double eta_, double ma, double qa, NormalRand ran_): q(q_), m(m_), logl(logl_), T(T_), n(n_), eta(eta_), m_a(ma), q_a(qa), ran(ran_) {
 		if(!(q.size() == m.size() && q.size() == T.size() && q.size() == n.size()))
 			throw length_error("Los vectores deben tener la misma cantidad de elementos, uno para cada especie en orden");
@@ -122,10 +127,14 @@ public:
 
 	// Overall efect of collisions
 	void operator()(const state_type &x, state_type &dxdt, const double t ){
-		vector_type dxdt_col = slow_down(x, t) + dispersion(x, t);
-		dxdt[3] += dxdt_col[0];
-		dxdt[4] += dxdt_col[1];
-		dxdt[5] += dxdt_col[2];
+		vector_type dvdt = null_vector;
+		
+		if(sdQ) dvdt = dvdt + slow_down(x, t);
+		if(dispQ) dvdt = dvdt +  dispersion(x, t);
+
+		dxdt[3] += dvdt[0];
+		dxdt[4] += dvdt[1];
+		dxdt[5] += dvdt[2];
 	}
 
 };
