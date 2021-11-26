@@ -47,15 +47,11 @@ int main(int argc, char* argv[]){
 	// Motion equation (no fields)
 	MotionEquation eq(gam, null_vector_field, null_vector_field);
 
-	for(unsigned long long seed=1; seed<100; seed++){
+	for(unsigned long long seed=1; seed<2; seed++){
 
 		// Collisions operator
 		NormalRand ran(seed); // seed
 		Collisions col(q, m, loglambda, T, n, eta, m_a, q_a, ran);
-		col.sdQ = false;
-
-		// Evolution operator
-		Evolution<MotionEquation, Collisions> evol(eq, col);
 
 		// initial state
 		state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.15};
@@ -67,7 +63,7 @@ int main(int argc, char* argv[]){
 
 		cout << "Calculating collisions with seed " << seed << '\n';
 
-		integrate(evol, x, 0, 120.0, 0.00001, obs, 500);
+		full_integrate(eq, col, 200, x, 0, 1200, 0.00001, obs, 1);
 	}
 
 	cout << "Finished :)\n";

@@ -31,17 +31,18 @@ public:
 	}
 };
 
-template<typename motion_eq_type, typename collision_op_type>
-class Evolution{
-	motion_eq_type eq;
-	collision_op_type col;
-public:
-	Evolution(motion_eq_type motion_eq, collision_op_type collision_operator): eq(motion_eq), col(collision_operator) {}
-	void operator()(const state_type &x, state_type &dxdt, const double t ){
-		eq(x, dxdt, t);
-		col(x, dxdt, t);
-	}
-};
+
+// template<typename motion_eq_type, typename collision_op_type>
+// class Evolution{
+// 	motion_eq_type eq;
+// 	collision_op_type col;
+// public:
+// 	Evolution(motion_eq_type motion_eq, collision_op_type collision_operator): eq(motion_eq), col(collision_operator) {}
+// 	void operator()(const state_type &x, state_type &dxdt, const double t ){
+// 		eq(x, dxdt, t);
+// 		col(x, dxdt, t);
+// 	}
+// };
 
 // Integrator RK4_NL
 template <typename eq_type, typename obs_type>
@@ -106,5 +107,53 @@ public:
 			os << t << '\t' << x[0] << ' ' << x[1] << ' ' << x[2] << ' ' << x[3] << ' ' << x[4] << ' ' << x[5] << '\n';
 	}
 };
+
+
+// Integrate particles 
+template <typename eq_type, typename obs_type, typename collisions_type>
+int full_integrate(eq_type f, collisions_type col, int nskip,  state_type &x, double ti, double tf, double dt , obs_type obs, int obs_interval = 1){
+	cout << "==============COLLISIONS TOO=====================\n"
+			 << "Integrating:\nti = " << ti << "\ntf = " << tf << "\ndt = " << dt
+			 << "\nrecording every " << obs_interval << " steps\n";
+	double t = ti;
+	int steps = 0;
+	while(t < tf){
+
+		if (steps % obs_interval == 0) obs(x, t);
+
+		double a[6], b[6], c[6];
+		// Valores de las constantes del método integrador
+		a[0]=0.0;								b[0]=0.032918605146;	c[0]=0.0;
+		a[1]=-0.737101392796;		b[1]=0.823256998200;	c[1]=0.032918605146;
+		a[2]=-1.634740794341;		b[2]=0.381530948900;	c[2]=0.249351723343;
+		a[3]=-0.744739003780;		b[3]=0.200092213184;	c[3]=0.466911705055;
+		a[4]=-1.469897351522;		b[4]=1.718581042715;	c[4]=0.582030414044;
+		a[5]=-2.813971388035;		b[5]=0.27;						c[5]=0.847252983783;
+
+		state_type dxdt;
+		state_type xx; // intermediate states
+
+		dxdt = xx = null_state;
+
+		for(int i=0; i<6; i++){
+			double tt = t + c[i] * dt;
+
+			// dxdt = f(x, t)
+			f(x, dxdt, tt);
+
+			for(int j=0; j<6; j++){
+				xx[j] = a[i] * xx[j] + dt * dxdt[j];
+				x[j] = x[j] + b[i] * xx[j];
+			}
+		}
+
+		if (steps % nskip == 0)
+			col.euler_step(x, t, dt * nskip);
+
+		t += dt;
+		steps++;
+	}
+	return steps;
+}
 
 #endif // ODEINT

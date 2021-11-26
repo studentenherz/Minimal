@@ -32,10 +32,6 @@ class Collisions{
 	NormalRand ran; // random generator
 
 public:
-	// Use or not dispersion and slowing_down terms
-	bool dispQ = true;
-	bool sdQ = true;
-
 	Collisions (vector<int> q_, vector<double> m_, vector<double> logl_, vector<scalar_field_type> T_, vector<scalar_field_type> n_, double eta_, double ma, double qa, NormalRand ran_): q(q_), m(m_), logl(logl_), T(T_), n(n_), eta(eta_), m_a(ma), q_a(qa), ran(ran_) {
 		if(!(q.size() == m.size() && q.size() == T.size() && q.size() == n.size()))
 			throw length_error("Los vectores deben tener la misma cantidad de elementos, uno para cada especie en orden");
@@ -110,31 +106,29 @@ public:
 
 		// parallel and perpendicular versors
 		vector_type e_par = v / v_mod;
-		vector_type e_perp_1;
-
-		do{
-			vector_type random_vetor = {ran(), ran(), ran()};
-			e_perp_1 = cross(random_vetor, e_par);
-		}while(dot(e_par, e_perp_1) != 0); // get first perpendicular vector
+		
+		// get first perpendicular vector
+		vector_type e_perp_1 = cross(e_par, {1, 0, 0});
+		if(mod(e_perp_1) == 0)
+		e_perp_1 = cross(e_par, {0, 1, 0});
 
 		e_perp_1 = e_perp_1 / mod(e_perp_1); // normalize
 		vector_type e_perp_2 = cross(e_perp_1, e_par); // second perpendicular versor
 
-		vector_type dvdt = sqrt(nu_parallel) * v_mod * ran() * e_par + sqrt(nu_perpendicular) * v_mod * (ran() * e_perp_1 + ran() * e_perp_2);
+
+		vector_type dvdt = sqrt(nu_parallel) * v_mod * ran() * e_par + sqrt(nu_perpendicular/2) * v_mod * (ran() * e_perp_1 + ran() * e_perp_2);
 
 		return dvdt;
 	}
 
-	// Overall efect of collisions
-	void operator()(const state_type &x, state_type &dxdt, const double t ){
-		vector_type dvdt = null_vector;
-		
-		if(sdQ) dvdt = dvdt + slow_down(x, t);
-		if(dispQ) dvdt = dvdt +  dispersion(x, t);
+	// Overall efect of collisions one step 
+	void euler_step(state_type &x, const double t, const double dt ){
 
-		dxdt[3] += dvdt[0];
-		dxdt[4] += dvdt[1];
-		dxdt[5] += dvdt[2];
+		vector_type dv = slow_down(x, t) * dt +  dispersion(x, t) * sqrt(dt);
+
+		x[3] += dv[0];
+		x[4] += dv[1];
+		x[5] += dv[2];
 	}
 
 };
