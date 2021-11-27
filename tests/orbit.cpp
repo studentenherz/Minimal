@@ -16,16 +16,25 @@ vector_type B(const vector_type&x, const double t){
 }
 
 int main(int argc, char* argv[]){
+	if(argc < 2){
+		cout << "usage: orbit <input_filename> <output_file(default: out)> nskip\n";
+		return 1;
+	}
 
-	state_type x = load_initial_state("initialcond.dat"); // initial state
+	char* ifname = argv[1];
+	char const *ofname = "out";
+	if(argc >= 3) ofname = argv[2];
+
+
+	state_type x = load_initial_state(ifname); // initial state
 	MotionEquation motion_eq(gam, B);
 
-	ofstream fo("out.dat");
+	ofstream fo(ofname);
 	Observer obs(fo);
-	int steps_rk4nl = integrate(motion_eq, x, 0.0, 2570.0, 0.2, obs);
+	
+	integrate(motion_eq, x, 0.0, 2570.0, 0.2, obs);
 
-	cout << x << '\n';
-	cout << "Integrator rk4nl took " << steps_rk4nl << " steps\n";
+	cout << "Done :)\n";
 
 	return 0;
 }
