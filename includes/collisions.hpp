@@ -124,7 +124,7 @@ public:
 	// Overall efect of collisions one step 
 	void euler_step(state_type &x, const double t, const double dt ){
 
-		vector_type dv = slow_down(x, t) * dt +  dispersion(x, t) * sqrt(dt);
+		vector_type dv = /* slow_down(x, t) * dt + */ dispersion(x, t) * sqrt(dt);
 
 		x[3] += dv[0];
 		x[4] += dv[1];

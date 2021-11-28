@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
 	// Motion equation (no fields)
 	MotionEquation eq(gam, null_vector_field, null_vector_field);
 
-	for(unsigned long long seed=1; seed<2; seed++){
+	for(unsigned long long seed=2; seed<=2; seed++){
 
 		// Collisions operator
 		NormalRand ran(seed); // seed
