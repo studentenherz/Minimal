@@ -102,7 +102,7 @@ public:
 
 		// nu coefficients
 		double nu_parallel = parallel_dispersion_coeff(x, t);
-		double nu_perpendicular = parallel_dispersion_coeff(x, t);
+		double nu_perpendicular = perpendicular_dispersion_coeff(x, t);
 
 		// parallel and perpendicular versors
 		vector_type e_par = v / v_mod;

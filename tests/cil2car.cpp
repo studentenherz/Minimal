@@ -1,43 +1,42 @@
 #include <fstream>
 #include <iostream>
 #include <cmath>
+#include <string>
 
 using namespace std;
 
 int main(int argc, char* argv[]){
 	if(argc < 2){
-		cout << "usage: test <input_filename> <output_file(default: out)> nskip\n";
+		cout << "usage: cil2car nfiles (i.dat)\n Ouputs to ./cart/";
 		return 1;
 	}
 
-	char* ifname = argv[1];
-	char const *ofname = "out";
-	if(argc >= 3) ofname = argv[2];
+	int n = atoi(argv[1]);
 
-	ifstream fi(ifname);
-	ofstream fo(ofname);
+	for(int i=1; i<=n; i++){
+		string ifname;
+		ifname = to_string(i) + ".dat";
+		ifstream fi(ifname);
 
-	if(!fi.is_open()){ 
-		cerr << "Unable to open file " << ifname << "\n";
-		return 2;
-	}
-
-	int nskip=1;
-	if(argc >= 4) nskip = atoi(argv[3]);
-
-	double t, r, q, z, vr, vq, vz;
-	double x, y, vx, vy;
-
-	int i=0;
-	while(fi >> t >> r >> q >> z >> vr >> vq >> vz){
-		if(i % nskip == 0){
-			x = r * cos(q);
-			y = r * sin(q);
-			vx = vr * cos(q) - vq * sin(q);
-			vy = vr * sin(q) + vq * cos(q);
-			fo << t << ' ' << x << ' ' << y << ' ' << z << ' ' << vx << ' ' << vy << ' ' << vz << '\n';
+		if(!fi.is_open()){ 
+			cerr << "Unable to open file " << ifname << "\n";
+			return 2;
 		}
-		i++;
+
+		string ofname("cart/");
+		ofname += ifname;
+		ofstream fo(ofname);
+
+		double t, r, q, z, vr, vq, vz;
+		double x, y, vx, vy;
+
+		while(fi >> t >> r >> q >> z >> vr >> vq >> vz){
+				x = r * cos(q);
+				y = r * sin(q);
+				vx = vr * cos(q) - vq * sin(q);
+				vy = vr * sin(q) + vq * cos(q);
+				fo << t << ' ' << x << ' ' << y << ' ' << z << ' ' << vx << ' ' << vy << ' ' << vz << '\n';
+		}
 	}
 
 	return 0;
