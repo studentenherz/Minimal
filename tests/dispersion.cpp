@@ -39,7 +39,7 @@ double nf(const vector_type& v, double t){
 int main(int argc, char* argv[]){
 
 	/*
-		Slowing down and dispersion of an Hydrogen ion in an homogeneus plasma by the effect of the electrons
+		Dispersion of an Hydrogen ion in an homogeneus plasma by the effect of the electrons
 		n = 10^{20} m^{-3}, T = 2.5 keV
 	*/
 

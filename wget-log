@@ -1,0 +1,79 @@
+failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:00:48--  (try: 2)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:03:00--  (try: 3)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:05:14--  (try: 4)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:07:28--  (try: 5)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:09:44--  (try: 6)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:12:00--  (try: 7)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:14:16--  (try: 8)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:16:35--  (try: 9)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:18:53--  (try:10)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:21:13--  (try:11)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:23:32--  (try:12)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:25:52--  (try:13)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:28:11--  (try:14)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:30:30--  (try:15)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:32:49--  (try:16)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:35:09--  (try:17)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:37:28--  (try:18)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:39:47--  (try:19)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Retrying.
+
+--2021-12-01 15:42:07--  (try:20)  https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/master
+Connecting to api.github.com (api.github.com)|20.201.28.148|:443... failed: Connection timed out.
+Giving up.
+
