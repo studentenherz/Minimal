@@ -1,11 +1,3 @@
-/*
- *  The purpose of this code is to test whether the dispersion part of the collisons
- *	code is working properly or not. For this purpose in the method euler_step of Collision
- *	class the effect of slowing down should be commented to isolate the effects.
- *
-*/
-
-
 #include <fstream>
 #include <iostream>
 #include <string>

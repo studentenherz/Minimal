@@ -1,7 +1,7 @@
 #if !defined(UTIL)
 #define UTIL
 
-#define sqr(a) a * a
+#define sqr(a) (a) * (a)
 #define two_pi 6.283185307179586477
 
 #include <string>

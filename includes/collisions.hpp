@@ -1,8 +1,6 @@
 #if !defined(COLLISIONS_HPP)
 #define COLLISIONS_HPP
 
-#define sqr(a) a * a
-
 #include <vector>
 #include <cmath>
 

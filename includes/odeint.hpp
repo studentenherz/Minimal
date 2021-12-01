@@ -156,4 +156,25 @@ int full_integrate(eq_type f, collisions_type col, int nskip,  state_type &x, do
 	return steps;
 }
 
+// Integrate particles 
+template <typename obs_type, typename collisions_type>
+int coll_integrate(collisions_type col, int nskip,  state_type &x, double ti, double tf, double dt , obs_type obs, int obs_interval = 1){
+	cout << "==============ONLY COLLISIONS=====================\n"
+			 << "Integrating:\nti = " << ti << "\ntf = " << tf << "\ndt = " << dt
+			 << "\nrecording every " << obs_interval << " steps\n";
+	double t = ti;
+	int steps = 0;
+	while(t < tf){
+
+		if (steps % obs_interval == 0) obs(x, t);
+
+		if (steps % nskip == 0)
+			col.euler_step(x, t, dt * nskip);
+
+		t += dt;
+		steps++;
+	}
+	return steps;
+}
+
 #endif // ODEINT
