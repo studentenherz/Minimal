@@ -15,7 +15,7 @@
 
 using namespace std;
 
-const double v0 = 1.29477e7; // m/s  (3.54 MeV of a proton)
+const double v0 = 1.29477e7; // m/s  (3.54 MeV of an alpha)
 // const double pre_eta = 806039; // m^6 s^-4
 const double n0 = 1e20; // m
 const double Omega = 0.00085; // s^-1
@@ -23,12 +23,12 @@ const double tau = 93e-3; // s
 const double a = 0.5; // m
 
 // adimensional constants 
-const double gam = 3.42504e6;
-const double eta = 1200.55;
+const double gam = 2.408e6;
+const double eta = 3453.5;
 
 // campo de temperatura (en realidad da la velocidad media en relación a v0)
 double Tf(const vector_type& v, double t){
-	return 1.61029;
+	return 2.29035;
 }
 
 // campo de densidad (en relación a n0)
@@ -53,13 +53,13 @@ int main(int argc, char* argv[]){
 	// int q_a = 2;
 	// double m_a = 4 * 1836;
 
-	// H
-	int q_a = 1;
-	double m_a = 1836;
-
-	// // D
+	// // H
 	// int q_a = 1;
-	// double m_a = 2 * 1836;
+	// double m_a = 1836;
+
+	// D
+	int q_a = 1;
+	double m_a = 2 * 1836;
 
 
 	// Motion equation (no fields)
@@ -72,10 +72,10 @@ int main(int argc, char* argv[]){
 
 	// initial state
 	// state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 1}; // alpha from D+T
-	state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.326015}; // H at 93 keV from NBI
-	// state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.230527}; // D at 93 keV from NBI
+	// state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.326015}; // H at 93 keV from NBI
+	state_type x = {1.0, 0.0, 0.0, 0.0, 0.0, 0.230527}; // D at 93 keV from NBI
 
-	string fname = "slowing_down.dat";
+	string fname = "slowing_down_D_93kev.dat";
 	ofstream fo(fname);
 	Observer obs(fo);
 
